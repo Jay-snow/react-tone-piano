@@ -23,6 +23,17 @@
   border-radius: 0px 0 6px 6px;
 }
 
+.white-key:hover {
+  background-color: lightblue;
+  cursor: pointer;
+}
+
+.white-key:active {
+  background-color: lawngreen;
+}
+
+
+
 .black-key {
   background-color: black;
   width: 20px;
