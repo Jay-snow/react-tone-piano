@@ -1,12 +1,14 @@
 import * as Tone from 'tone'
 
 
+
 function PianoWrapper() {
 
-    function clickHandler(e) {
+
+
+    function clickHandler(e: any) {
         let note = e.target.dataset.note
         const synth = new Tone.Synth().toDestination();
-
         synth.triggerAttackRelease(note, "8n");
 
     }
@@ -14,9 +16,9 @@ function PianoWrapper() {
 
     return (
         <div className="piano-wrapper">
-            <div onMouseDown={clickHandler} data-note={"C3"} className="white-key"> </div>
-            <div onMouseDown={clickHandler} data-note={"D3"} className="white-key"> </div>
-            <div onMouseDown={clickHandler} data-note={"E3"} className="white-key"> </div>
+            <div onMouseOver={clickHandler} data-note={"C3"} className="white-key"> </div>
+            <div onMouseEnter={clickHandler} data-note={"D3"} className="white-key"> </div>
+            <div onMouseEnter={clickHandler} data-note={"E3"} className="white-key"> </div>
             <div onMouseDown={clickHandler} data-note={"F3"} className="white-key"> </div>
             <div onMouseDown={clickHandler} data-note={"G3"} className="white-key"> </div>
             <div onMouseDown={clickHandler} data-note={"A3"} className="white-key"> </div>
