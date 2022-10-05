@@ -20,7 +20,7 @@ function Key(props: any) {
     }
 
     return (
-        <button draggable="false" onMouseUp={props.releaseAttack} onMouseDown={props.clickHandler} style={{ marginLeft: props.margin }} onMouseLeave={props.releaseAttack} data-id={props.id} data-type={props.type} onMouseMove={props.clickHandler} data-playing={props.isPlaying} data-note={props.note} className={getClass()}>
+        <button draggable="false" onTouchEnd={props.clickHandler} onMouseUp={props.releaseAttack} onMouseDown={props.clickHandler} style={{ marginLeft: props.margin }} onMouseLeave={props.releaseAttack} data-id={props.id} data-type={props.type} onMouseMove={props.clickHandler} data-playing={props.isPlaying} data-note={props.note} className={getClass()}>
 
         </button>
 

@@ -110,7 +110,7 @@ function PianoWrapper() {
                 <Key draggable="false" key={note.id} id={note.id} type={note.type} releaseAttack={releaseAttack} clickHandler={clickHandler} isPlaying={note.isPlaying} note={note.note} />
             )}
             {blackKeys.map((key, i) =>
-                <Key draggable="false" key={key.id} id={key.id} releaseAttack={releaseAttack} clickHandler={clickHandler} margin={key.margin} isPlaying={key.isPlaying} note={key.note} />
+                <Key draggable="false" key={key.id} id={key.id} type={key.type} releaseAttack={releaseAttack} clickHandler={clickHandler} margin={key.margin} isPlaying={key.isPlaying} note={key.note} />
             )
             }
 
