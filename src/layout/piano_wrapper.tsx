@@ -33,8 +33,8 @@ function PianoWrapper() {
 
     function initBlackKeys() {
 
-        let sound_library = ["C#3", "D#3", "E#3", "F#3", "G#3"]
-        let margin_library = [6, 36, 96, 126, 156]
+        let sound_library = ["C#3", "D#3", "F#3", "G#3", "A#3", "C#4", "D#4", "F#4", "G#4", "A#4",];
+        let margin_library = [6, 36, 96, 126, 156, 216, 246, 306, 336, 366];
         let sound_collection = []
 
 
@@ -69,13 +69,31 @@ function PianoWrapper() {
 
             stateCopy[id].isPlaying = true;
             setNotes(stateCopy);
-            console.log(stateCopy)
+        }
+
+    }
+
+    function clickBlackKeyHandler(e: any) {
+        let note = e.target.dataset.note;
+        let id = parseInt(e.target.dataset.id);
+        console.log(note)
+        let isPlaying = (e.target.dataset.playing === 'true');
+        if (e.buttons === 1 && !isPlaying) {
+            Tone.start();
+            console.log('noise')
+            synth.triggerAttack(note);
+            e.target.dataset.playing = 'true';
+            //Update state by first making a clone.
+            //This is a best practice, I forget why.
+            let stateCopy = [...blackKeys];
+
+            stateCopy[id].isPlaying = true;
+            setblackKeys(stateCopy);
         }
 
     }
 
     //Utility method, used to stop playing music.
-
     function releaseAttack(e: any) {
         e.target.dataset.playing = 'false';
         //Update state
@@ -83,6 +101,15 @@ function PianoWrapper() {
         let id = parseInt(e.target.dataset.id);
         stateCopy[id].isPlaying = false;
         setNotes(stateCopy);
+        synth.triggerRelease();
+    }
+    function releaseBlackKeyAttack(e: any) {
+        e.target.dataset.playing = 'false';
+        //Update state
+        let stateCopy = [...blackKeys];
+        let id = parseInt(e.target.dataset.id);
+        stateCopy[id].isPlaying = false;
+        setblackKeys(stateCopy);
         synth.triggerRelease();
     }
 
@@ -93,15 +120,10 @@ function PianoWrapper() {
                 <Key draggable="false" key={note.id} id={note.id} releaseAttack={releaseAttack} clickHandler={clickHandler} isPlaying={note.isPlaying} note={note.note} />
             )}
             {blackKeys.map((key, i) =>
-                <BlackKey draggable="false" key={key.id} id={key.id} releaseAttack={releaseAttack} clickHandler={clickHandler} margin={key.margin} isPlaying={key.isPlaying} note={key.note} />
+                <BlackKey draggable="false" key={key.id} id={key.id} releaseAttack={releaseBlackKeyAttack} clickHandler={clickBlackKeyHandler} margin={key.margin} isPlaying={key.isPlaying} note={key.note} />
             )
             }
-            {/* <BlackKey draggable="false" id={1} releaseAttack={releaseAttack} clickHandler={clickHandler} isPlaying={false} note={"C#3"} /> */}
-            {/* <div className="black-key" style={{ marginLeft: 6 }}> </div>
-            <div className="black-key" style={{ marginLeft: 36 }}> </div>
-            <div className="black-key" style={{ marginLeft: 96 }}> </div>
-            <div className="black-key" style={{ marginLeft: 126 }}> </div>
-            <div className="black-key" style={{ marginLeft: 156 }}> </div> */}
+
         </div>
     );
 }
