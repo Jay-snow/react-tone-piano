@@ -56,11 +56,11 @@ function PianoWrapper() {
     function clickHandler(e: any) {
         let note = e.target.dataset.note;
         let id = parseInt(e.target.dataset.id);
-        console.log(note)
+        // console.log(e.nativeEvent.type)
         let isPlaying = (e.target.dataset.playing === 'true');
+
         if (e.buttons === 1 && !isPlaying) {
             Tone.start();
-            console.log('noise')
             synth.triggerAttack(note);
             e.target.dataset.playing = 'true';
             //Update state by first making a clone.
@@ -76,7 +76,6 @@ function PianoWrapper() {
     function clickBlackKeyHandler(e: any) {
         let note = e.target.dataset.note;
         let id = parseInt(e.target.dataset.id);
-        console.log(note)
         let isPlaying = (e.target.dataset.playing === 'true');
         if (e.buttons === 1 && !isPlaying) {
             Tone.start();
