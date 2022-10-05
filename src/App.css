@@ -25,7 +25,7 @@
 
 .white-key:hover {
   background-color: lightblue;
-  cursor: pointer;
+  /* cursor: pointer; */
 }
 
 .white-key:active {
