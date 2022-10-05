@@ -28,7 +28,8 @@
   /* cursor: pointer; */
 }
 
-.white-key:active {
+
+.white-key.active {
   background-color: lawngreen;
 }
 

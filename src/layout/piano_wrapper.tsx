@@ -1,5 +1,6 @@
 import * as Tone from 'tone'
 import React, { useState } from 'react';
+import Key from './key';
 
 const synth = new Tone.Synth().toDestination();
 document.addEventListener("mouseup", e => {
@@ -10,20 +11,40 @@ document.addEventListener("mouseup", e => {
 
 function PianoWrapper() {
 
-    const [notes, setNotes] = useState(["C3", "D3", "E3", "F3", "G3", "A3", "B3"])
+    const [notes, setNotes] = useState(initPiano())
 
-    let isPlaying = false;
+    function initPiano() {
+
+        let sound_library = ["C3", "D3", "E3", "F3", "G3", "A3", "B3"]
+        let sound_collection = []
+        for (let i = 0; i < sound_library.length; i++) {
+            sound_collection.push({
+                note: sound_library[i],
+                id: i,
+                isPlaying: false,
+            })
+        }
+
+
+        return sound_collection
+    }
 
     function clickHandler(e: any) {
         let note = e.target.dataset.note;
+        let id = parseInt(e.target.dataset.id);
         let isPlaying = (e.target.dataset.playing === 'true');
-        console.log(isPlaying)
         if (e.buttons === 1 && !isPlaying) {
             Tone.start();
             synth.triggerAttack(note);
             e.target.dataset.playing = 'true';
-            console.log(e.target.dataset.playing)
+            //Update state
+            let stateCopy = [...notes];
+
+            stateCopy[id].isPlaying = true;
+            setNotes(stateCopy);
+            console.log(stateCopy)
         }
+
 
 
 
@@ -31,18 +52,20 @@ function PianoWrapper() {
 
     function releaseAttack(e: any) {
         e.target.dataset.playing = 'false';
+        //Update state
+        let stateCopy = [...notes];
+        let id = parseInt(e.target.dataset.id);
+        stateCopy[id].isPlaying = false;
+        setNotes(stateCopy);
+        console.log(stateCopy)
         synth.triggerRelease();
-    }
-
-    function test() {
-        console.log("HEllo");
     }
 
 
     return (
         <div className="piano-wrapper">
             {notes.map((note, i) =>
-                <button draggable="false" key={i} onMouseLeave={releaseAttack} onMouseMove={clickHandler} data-playing={false} data-note={note} className="white-key"> </button>
+                <Key draggable="false" key={note.id} id={note.id} releaseAttack={releaseAttack} clickHandler={clickHandler} isPlaying={note.isPlaying} note={note.note} className="white-key" />
             )}
 
             <div className="black-key" style={{ marginLeft: 6 }}> </div>
