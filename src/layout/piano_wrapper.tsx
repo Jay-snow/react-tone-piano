@@ -26,6 +26,7 @@ function PianoWrapper() {
                 note: sound_library[i],
                 id: i,
                 isPlaying: false,
+                type: 'white',
             })
         }
         return sound_collection
@@ -37,13 +38,13 @@ function PianoWrapper() {
         let margin_library = [6, 36, 96, 126, 156, 216, 246, 306, 336, 366];
         let sound_collection = []
 
-
         for (let i = 0; i < sound_library.length; i++) {
             sound_collection.push({
                 note: sound_library[i],
                 margin: margin_library[i],
                 id: i,
                 isPlaying: false,
+                type: 'black',
             })
         }
 
@@ -56,7 +57,6 @@ function PianoWrapper() {
     function clickHandler(e: any) {
         let note = e.target.dataset.note;
         let id = parseInt(e.target.dataset.id);
-        // console.log(e.nativeEvent.type)
         let isPlaying = (e.target.dataset.playing === 'true');
 
         if (e.buttons === 1 && !isPlaying) {
@@ -65,61 +65,52 @@ function PianoWrapper() {
             e.target.dataset.playing = 'true';
             //Update state by first making a clone.
             //This is a best practice, I forget why.
-            let stateCopy = [...notes];
+            console.log(e.target.dataset.type)
+            if (e.target.dataset.type === 'white') {
+                let stateCopy = [...notes];
+                stateCopy[id].isPlaying = true;
+                setNotes(stateCopy);
+            } else {
+                let stateCopy = [...blackKeys];
+                stateCopy[id].isPlaying = true;
+                setblackKeys(stateCopy);
+            }
 
-            stateCopy[id].isPlaying = true;
-            setNotes(stateCopy);
+
         }
 
     }
 
-    function clickBlackKeyHandler(e: any) {
-        let note = e.target.dataset.note;
-        let id = parseInt(e.target.dataset.id);
-        let isPlaying = (e.target.dataset.playing === 'true');
-        if (e.buttons === 1 && !isPlaying) {
-            Tone.start();
-            console.log('noise')
-            synth.triggerAttack(note);
-            e.target.dataset.playing = 'true';
-            //Update state by first making a clone.
-            //This is a best practice, I forget why.
-            let stateCopy = [...blackKeys];
-
-            stateCopy[id].isPlaying = true;
-            setblackKeys(stateCopy);
-        }
-
-    }
 
     //Utility method, used to stop playing music.
     function releaseAttack(e: any) {
         e.target.dataset.playing = 'false';
         //Update state
-        let stateCopy = [...notes];
-        let id = parseInt(e.target.dataset.id);
-        stateCopy[id].isPlaying = false;
-        setNotes(stateCopy);
-        synth.triggerRelease();
+        if (e.target.dataset.type === 'white') {
+            let stateCopy = [...notes];
+            let id = parseInt(e.target.dataset.id);
+            stateCopy[id].isPlaying = false;
+            setNotes(stateCopy);
+            synth.triggerRelease();
+        } else {
+            let stateCopy = [...blackKeys];
+            let id = parseInt(e.target.dataset.id);
+            stateCopy[id].isPlaying = false;
+            setblackKeys(stateCopy);
+            synth.triggerRelease();
+        }
+
     }
-    function releaseBlackKeyAttack(e: any) {
-        e.target.dataset.playing = 'false';
-        //Update state
-        let stateCopy = [...blackKeys];
-        let id = parseInt(e.target.dataset.id);
-        stateCopy[id].isPlaying = false;
-        setblackKeys(stateCopy);
-        synth.triggerRelease();
-    }
+
 
 
     return (
         <div className="piano-wrapper">
             {notes.map((note, i) =>
-                <Key draggable="false" key={note.id} id={note.id} releaseAttack={releaseAttack} clickHandler={clickHandler} isPlaying={note.isPlaying} note={note.note} />
+                <Key draggable="false" key={note.id} id={note.id} type={note.type} releaseAttack={releaseAttack} clickHandler={clickHandler} isPlaying={note.isPlaying} note={note.note} />
             )}
             {blackKeys.map((key, i) =>
-                <BlackKey draggable="false" key={key.id} id={key.id} releaseAttack={releaseBlackKeyAttack} clickHandler={clickBlackKeyHandler} margin={key.margin} isPlaying={key.isPlaying} note={key.note} />
+                <Key draggable="false" key={key.id} id={key.id} releaseAttack={releaseAttack} clickHandler={clickHandler} margin={key.margin} isPlaying={key.isPlaying} note={key.note} />
             )
             }
 

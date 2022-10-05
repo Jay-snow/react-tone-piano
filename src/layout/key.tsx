@@ -6,13 +6,21 @@ import React, { useState } from 'react';
 
 function Key(props: any) {
 
+    const getClasshelper = () => {
+        if (props.type === 'white') {
+            return 'white-key'
+        } else {
+            return 'black-key'
+        }
+    }
+
     const getClass = () => {
-        return (props.isPlaying ? 'white-key active' : 'white-key')
+        return (props.isPlaying ? `${getClasshelper()} active` : getClasshelper())
 
     }
 
     return (
-        <button draggable="false" onMouseUp={props.releaseAttack} onMouseDown={props.clickHandler} onMouseLeave={props.releaseAttack} data-id={props.id} onMouseMove={props.clickHandler} data-playing={props.isPlaying} data-note={props.note} className={getClass()}>
+        <button draggable="false" onMouseUp={props.releaseAttack} onMouseDown={props.clickHandler} style={{ marginLeft: props.margin }} onMouseLeave={props.releaseAttack} data-id={props.id} data-type={props.type} onMouseMove={props.clickHandler} data-playing={props.isPlaying} data-note={props.note} className={getClass()}>
 
         </button>
 
