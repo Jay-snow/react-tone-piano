@@ -1,11 +1,15 @@
 import * as Tone from 'tone'
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Key from './key';
 import BlackKey from './blackkey';
 
 const synth = new Tone.Synth().toDestination();
 //Global on mouseup, stop playing.
 document.addEventListener("mouseup", e => {
+    synth.triggerRelease();
+})
+
+document.addEventListener("keyup", e => {
     synth.triggerRelease();
 })
 
@@ -20,13 +24,16 @@ function PianoWrapper() {
     function initPiano() {
 
         let sound_library = ["C3", "D3", "E3", "F3", "G3", "A3", "B3", "C4", "D4", "E4", "F4", "G4", "A4", "B4"]
+        let keyboard_libary = ["A", "S", "D", "G", "H"]
         let sound_collection = []
         for (let i = 0; i < sound_library.length; i++) {
+            let letter = keyboard_libary[i] ? keyboard_libary[i] : null;
             sound_collection.push({
                 note: sound_library[i],
                 id: i,
                 isPlaying: false,
                 type: 'white',
+                keyboard_libary: (keyboard_libary[i] ? keyboard_libary[i] : null)
             })
         }
         return sound_collection
@@ -81,6 +88,29 @@ function PianoWrapper() {
 
     }
 
+    function keyboardHandler(e: any) {
+        console.log(e)
+        let note = e.note;
+        let id = parseInt(e.id);
+        let isPlaying = (e.isPlaying === 'true');
+
+        if (!isPlaying) {
+            Tone.start();
+            synth.triggerAttack(note);
+            e.isPlaying = 'true';
+            //Update state by first making a clone.
+            //This is a best practice, I forget why.
+            if (e.type === 'white') {
+                let stateCopy = [...notes];
+                stateCopy[id].isPlaying = true;
+                setNotes(stateCopy);
+            }
+
+
+        }
+
+    }
+
 
     //Utility method, used to stop playing music.
     function releaseAttack(e: any) {
@@ -102,12 +132,34 @@ function PianoWrapper() {
 
     }
 
+    useEffect(() => {
+        document.addEventListener("keydown", e => {
+            _keydown(e);
+        })
+    }, [])
+
+    const _keydown = (e: KeyboardEvent) => {
+
+
+        for (let i = 0; i < notes.length; i++) {
+            if (notes[i].keyboard_libary === e.key.toUpperCase()) {
+                console.log("match!");
+                let note_to_play = notes[i];
+                keyboardHandler(note_to_play)
+            }
+        }
+
+
+
+    }
+
+
 
 
     return (
         <div className="piano-wrapper">
             {notes.map((note, i) =>
-                <Key draggable="false" key={note.id} id={note.id} type={note.type} releaseAttack={releaseAttack} clickHandler={clickHandler} isPlaying={note.isPlaying} note={note.note} />
+                <Key draggable="false" keyboard_letter={note.keyboard_libary} key={note.id} id={note.id} type={note.type} releaseAttack={releaseAttack} clickHandler={clickHandler} isPlaying={note.isPlaying} note={note.note} />
             )}
             {blackKeys.map((key, i) =>
                 <Key draggable="false" key={key.id} id={key.id} type={key.type} releaseAttack={releaseAttack} clickHandler={clickHandler} margin={key.margin} isPlaying={key.isPlaying} note={key.note} />
