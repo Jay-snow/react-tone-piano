@@ -9,9 +9,13 @@ html {
 }
 
 :root {
-  --keyboard: hsl(300, 100%, 16%);
+  /* --keyboard: hsl(300, 100%, 16%);
+  --keyboard-shadow: hsla(19, 50%, 66%, 0.2);
+  --keyboard-border: hsl(20, 91%, 5%); */
+  --keyboard: hsl(31, 94%, 42%);
   --keyboard-shadow: hsla(19, 50%, 66%, 0.2);
   --keyboard-border: hsl(20, 91%, 5%);
+
   --black-10: hsla(0, 0%, 0%, 0.1);
   --black-20: hsla(0, 0%, 0%, 0.2);
   --black-30: hsla(0, 0%, 0%, 0.3);
@@ -29,7 +33,7 @@ html {
 }
 
 body {
-  background-color: lightblue;
+  background-color: #2F4858;
 }
 
 
@@ -55,11 +59,8 @@ body {
 }
 
 .white-key {
-  /* background-color: white;
 
-  border: 1px solid black;
-  box-shadow: 3px 3px 3px black;
-  border-radius: 0px 0 6px 6px; */
+  border: 0;
   width: 3.5rem;
   height: 12.5rem;
   border-left: 1px solid hsl(0, 0%, 73%);
