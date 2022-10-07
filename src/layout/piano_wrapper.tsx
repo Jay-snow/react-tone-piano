@@ -11,14 +11,12 @@ document.addEventListener("mouseup", e => {
 
 
 
-
-
 function PianoWrapper() {
 
     const [notes, setNotes] = useState(initPiano())
     const [blackKeys, setblackKeys] = useState(initBlackKeys())
 
-
+    //This will effectively be a "OnComponentMount"
     useEffect(() => {
         document.addEventListener("keydown", e => {
             _keydown(e);
@@ -31,9 +29,8 @@ function PianoWrapper() {
 
     }, [])
 
+    //Hander for document events
     const _keydown = (e: KeyboardEvent) => {
-
-
         for (let i = 0; i < notes.length; i++) {
             if (notes[i].keyboard_libary === e.key.toUpperCase()) {
                 console.log("match!");
@@ -41,12 +38,9 @@ function PianoWrapper() {
                 keyboardHandler(note_to_play)
             }
         }
-
-
-
     }
 
-
+    //Hander for document events
     const _keyup = (e: KeyboardEvent) => {
         let whiteKeyCopy = [...notes];
 
@@ -81,7 +75,8 @@ function PianoWrapper() {
     function initBlackKeys() {
 
         let sound_library = ["C#3", "D#3", "F#3", "G#3", "A#3", "C#4", "D#4", "F#4", "G#4", "A#4",];
-        let margin_library = [6, 36, 96, 126, 156, 216, 246, 306, 336, 366];
+        // let margin_library = [6, 36, 96, 126, 156, 216, 246, 306, 336, 366];
+        let margin_library = [60, 100, 180, 220, 260, 340, 380, 460, 500, 540];
         let sound_collection = []
 
         for (let i = 0; i < sound_library.length; i++) {
@@ -111,7 +106,6 @@ function PianoWrapper() {
             e.target.dataset.playing = 'true';
             //Update state by first making a clone.
             //This is a best practice, I forget why.
-            console.log(e.target.dataset.type)
             if (e.target.dataset.type === 'white') {
                 let stateCopy = [...notes];
                 stateCopy[id].isPlaying = true;
