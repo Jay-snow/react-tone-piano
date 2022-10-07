@@ -9,9 +9,7 @@ document.addEventListener("mouseup", e => {
     synth.triggerRelease();
 })
 
-document.addEventListener("keyup", e => {
-    synth.triggerRelease();
-})
+
 
 
 
@@ -19,6 +17,47 @@ function PianoWrapper() {
 
     const [notes, setNotes] = useState(initPiano())
     const [blackKeys, setblackKeys] = useState(initBlackKeys())
+
+
+    useEffect(() => {
+        document.addEventListener("keydown", e => {
+            _keydown(e);
+        })
+
+
+        document.addEventListener("keyup", e => {
+            _keyup(e);
+        })
+
+    }, [])
+
+    const _keydown = (e: KeyboardEvent) => {
+
+
+        for (let i = 0; i < notes.length; i++) {
+            if (notes[i].keyboard_libary === e.key.toUpperCase()) {
+                console.log("match!");
+                let note_to_play = notes[i];
+                keyboardHandler(note_to_play)
+            }
+        }
+
+
+
+    }
+
+
+    const _keyup = (e: KeyboardEvent) => {
+        let whiteKeyCopy = [...notes];
+
+        for (let key of whiteKeyCopy) {
+            key.isPlaying = false;
+        }
+        setNotes(whiteKeyCopy);
+        synth.triggerRelease();
+
+
+    }
 
     //Sets up the Piano state.
     function initPiano() {
@@ -132,26 +171,8 @@ function PianoWrapper() {
 
     }
 
-    useEffect(() => {
-        document.addEventListener("keydown", e => {
-            _keydown(e);
-        })
-    }, [])
-
-    const _keydown = (e: KeyboardEvent) => {
 
 
-        for (let i = 0; i < notes.length; i++) {
-            if (notes[i].keyboard_libary === e.key.toUpperCase()) {
-                console.log("match!");
-                let note_to_play = notes[i];
-                keyboardHandler(note_to_play)
-            }
-        }
-
-
-
-    }
 
 
 
