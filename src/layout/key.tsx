@@ -21,7 +21,7 @@ function Key(props: any) {
 
     return (
         <button draggable="false" onTouchMove={props.clickHandler} onMouseUp={props.releaseAttack} onMouseDown={props.clickHandler} style={{ marginLeft: props.margin }} onMouseLeave={props.releaseAttack} data-id={props.id} data-type={props.type} onMouseMove={props.clickHandler} data-playing={props.isPlaying} data-note={props.note} className={getClass()}>
-            <p style={{ marginTop: 80 }}>{props.keyboard_letter}</p>
+            <p style={{ marginTop: 180 }}>{props.keyboard_letter}</p>
         </button>
 
     );
