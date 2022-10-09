@@ -1,7 +1,7 @@
 import * as Tone from 'tone'
 import React, { useState, useEffect } from 'react';
 import Key from './key';
-import BlackKey from './blackkey';
+
 
 const synth = new Tone.Synth().toDestination();
 //Global on mouseup, stop playing.
@@ -18,6 +18,32 @@ function PianoWrapper() {
 
     //This will effectively be a "OnComponentMount"
     useEffect(() => {
+
+        //Hander for document events
+        const _keydown = (e: KeyboardEvent) => {
+            for (let i = 0; i < notes.length; i++) {
+                if (notes[i].keyboard_libary === e.key.toUpperCase()) {
+                    console.log("match!");
+                    let note_to_play = notes[i];
+                    keyboardHandler(note_to_play)
+                }
+            }
+        }
+
+        //Hander for document events
+        const _keyup = (e: KeyboardEvent) => {
+            let whiteKeyCopy = [...notes];
+
+            for (let key of whiteKeyCopy) {
+                key.isPlaying = false;
+            }
+            setNotes(whiteKeyCopy);
+            synth.triggerRelease();
+
+
+        }
+
+
         document.addEventListener("keydown", e => {
             _keydown(e);
         })
@@ -27,31 +53,10 @@ function PianoWrapper() {
             _keyup(e);
         })
 
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    //Hander for document events
-    const _keydown = (e: KeyboardEvent) => {
-        for (let i = 0; i < notes.length; i++) {
-            if (notes[i].keyboard_libary === e.key.toUpperCase()) {
-                console.log("match!");
-                let note_to_play = notes[i];
-                keyboardHandler(note_to_play)
-            }
-        }
-    }
 
-    //Hander for document events
-    const _keyup = (e: KeyboardEvent) => {
-        let whiteKeyCopy = [...notes];
-
-        for (let key of whiteKeyCopy) {
-            key.isPlaying = false;
-        }
-        setNotes(whiteKeyCopy);
-        synth.triggerRelease();
-
-
-    }
 
     //Sets up the Piano state.
     function initPiano() {
@@ -66,7 +71,7 @@ function PianoWrapper() {
                 id: i,
                 isPlaying: false,
                 type: 'white',
-                keyboard_libary: (keyboard_libary[i] ? keyboard_libary[i] : null)
+                keyboard_libary: letter
             })
         }
         return sound_collection

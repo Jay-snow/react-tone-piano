@@ -1,9 +1,3 @@
-import * as Tone from 'tone'
-import React, { useState } from 'react';
-
-
-
-
 function Key(props: any) {
 
     const getClasshelper = () => {
